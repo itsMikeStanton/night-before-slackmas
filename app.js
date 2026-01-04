@@ -130,7 +130,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function scheduleAutoAdvanceFallback(ms = 1200) {
+  /*function scheduleAutoAdvanceFallback(ms = 1200) {
     // Used for pages whose VO is empty/silent and may not fire "ended" reliably
     clearAutoplayTimer();
     autoplayTimer = setTimeout(() => {
@@ -139,7 +139,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (currentIndex >= PAGES.length - 1) return;
       pageFlip.flipNext();
     }, ms);
-  }
+  }*/
 
   function maybeStartAutoplayNow() {
     // If user toggles ON, begin by (re)playing VO for current page.
@@ -148,13 +148,13 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!pageFlip) return;
 
     playVOFor(currentIndex);
-
+/*
     // If this is an empty VO page, don’t get stuck.
     const src = PAGES[currentIndex]?.audio || "";
     if (src.includes("empty.mp3")) {
       // Give a brief beat so it feels intentional
       scheduleAutoAdvanceFallback(900);
-    }
+    }*/
   }
 
   if (autoplayToggle) {
