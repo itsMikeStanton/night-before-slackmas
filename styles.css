@@ -14,6 +14,7 @@ body {
   background: radial-gradient(1200px 800px at 50% 20%, #072756, var(--bg));
   color: var(--text);
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 /* Use the "safe" viewport height on iOS (address bar aware) */
@@ -64,3 +65,5 @@ main {
   object-fit: cover; /* fills page */
   display: block;
 }
+
+#bookWrap, #book { touch-action: pan-y; }
