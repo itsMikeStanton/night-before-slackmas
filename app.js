@@ -25,6 +25,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const wrapEl = document.getElementById("bookWrap");
   const bookEl = document.getElementById("book");
 
+  // Tiny UI
+  const autoplayToggle = document.getElementById("autoplayToggle");
+
   // Build pages
   bookEl.innerHTML = "";
   for (const p of PAGES) {
@@ -70,7 +73,6 @@ window.addEventListener("DOMContentLoaded", () => {
   function unlockAudio() {
     if (audioUnlocked) return;
 
-    // attempt a tiny play/pause on BOTH channels so iOS "unlocks" them
     const tryUnlock = (a) =>
       a.play().then(() => {
         a.pause();
@@ -98,7 +100,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function playVOFor(index) {
-    // Cancel any pending delayed VO
     if (voDelayTimer) {
       clearTimeout(voDelayTimer);
       voDelayTimer = null;
@@ -113,8 +114,70 @@ window.addEventListener("DOMContentLoaded", () => {
       vo.src = src;
       vo.play().catch(() => {});
       voDelayTimer = null;
-    }, 1200); // your desired delay
+    }, 1200);
   }
+
+  // ----------------------------
+  // AUTOPLAY
+  // ----------------------------
+  let autoplayEnabled = false;
+  let autoplayTimer = null;
+
+  function clearAutoplayTimer() {
+    if (autoplayTimer) {
+      clearTimeout(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  function scheduleAutoAdvanceFallback(ms = 1200) {
+    // Used for pages whose VO is empty/silent and may not fire "ended" reliably
+    clearAutoplayTimer();
+    autoplayTimer = setTimeout(() => {
+      if (!autoplayEnabled) return;
+      if (!pageFlip) return;
+      if (currentIndex >= PAGES.length - 1) return;
+      pageFlip.flipNext();
+    }, ms);
+  }
+
+  function maybeStartAutoplayNow() {
+    // If user toggles ON, begin by (re)playing VO for current page.
+    // Then auto-advance will happen on "ended" or fallback timer.
+    if (!autoplayEnabled) return;
+    if (!pageFlip) return;
+
+    playVOFor(currentIndex);
+
+    // If this is an empty VO page, don’t get stuck.
+    const src = PAGES[currentIndex]?.audio || "";
+    if (src.includes("empty.mp3")) {
+      // Give a brief beat so it feels intentional
+      scheduleAutoAdvanceFallback(900);
+    }
+  }
+
+  if (autoplayToggle) {
+    autoplayToggle.checked = false; // disabled by default
+    autoplayToggle.addEventListener("change", () => {
+      autoplayEnabled = autoplayToggle.checked;
+      clearAutoplayTimer();
+
+      if (autoplayEnabled) {
+        maybeStartAutoplayNow();
+      }
+    });
+  }
+
+  // Advance when VO ends (only if autoplay on)
+  vo.addEventListener("ended", () => {
+    if (!autoplayEnabled) return;
+    if (!pageFlip) return;
+    if (currentIndex >= PAGES.length - 1) return;
+
+    clearAutoplayTimer();
+    pageFlip.flipNext();
+  });
 
   // ---- PageFlip init / rebuild ----
   let currentIndex = 0;
@@ -126,17 +189,14 @@ window.addEventListener("DOMContentLoaded", () => {
   let isRebuilding = false;
 
   function measureTargetSize() {
-    // iOS: visualViewport changes as address bar shows/hides
     const vv = window.visualViewport;
     const vw = Math.floor(vv?.width ?? window.innerWidth);
     const vh = Math.floor(vv?.height ?? window.innerHeight);
 
-    // breathing room (also helps iOS zoom quirks)
     const pad = 12;
     const maxW = vw - pad * 2;
     const maxH = vh - pad * 2;
 
-    // target portrait 2:3
     const w = Math.min(maxW, Math.floor(maxH * (2 / 3)));
     const h = Math.floor(w * (3 / 2));
 
@@ -144,7 +204,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function buildFlip({ w, h }, startIndex) {
-    // Lock wrapper size in px so iOS can't "helpfully" scale
     wrapEl.style.width = `${w}px`;
     wrapEl.style.height = `${h}px`;
 
@@ -176,20 +235,30 @@ window.addEventListener("DOMContentLoaded", () => {
     pageFlip.loadFromHTML(bookEl.querySelectorAll(".page"));
 
     pageFlip.on("flip", (e) => {
-      // SFX immediately
+      // page flip sfx
       playFlipSfx();
 
-      // page index
+      // cancel any pending autoplay fallback
+      clearAutoplayTimer();
+
       currentIndex = e.data;
 
-      // bg music: first flip only (and not on cover index 0)
+      // bg music: first flip only (not on cover)
       if (!bgMusicStarted && currentIndex >= 1) {
         bgMusic.play().catch(() => {});
         bgMusicStarted = true;
       }
 
-      // VO (delayed)
+      // VO always plays on flip
       playVOFor(currentIndex);
+
+      // If autoplay is enabled and this is an "empty" page, schedule fallback
+      if (autoplayEnabled) {
+        const src = PAGES[currentIndex]?.audio || "";
+        if (src.includes("empty.mp3")) {
+          scheduleAutoAdvanceFallback(900);
+        }
+      }
     });
 
     // Restore page without animating
@@ -232,7 +301,6 @@ window.addEventListener("DOMContentLoaded", () => {
     resizeTimer = setTimeout(maybeRebuildAfterResize, 150);
   });
 
-  // iOS address bar / toolbar resize fix
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
@@ -240,7 +308,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Optional: keyboard nav
   window.addEventListener("keydown", (e) => {
     if (!pageFlip) return;
     if (e.key === "ArrowRight") pageFlip.flipNext();

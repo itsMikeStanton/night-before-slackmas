@@ -67,3 +67,35 @@ main {
 }
 
 #bookWrap, #book { touch-action: pan-y; }
+
+#tinyLinks {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.85;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+#tinyLinks a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(229,231,235,0.55);
+}
+
+#tinyLinks a:hover {
+  border-bottom-color: rgba(229,231,235,0.9);
+}
+
+.tinyCheck {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.tinyCheck input {
+  transform: translateY(0.5px);
+}
