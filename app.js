@@ -253,12 +253,12 @@ window.addEventListener("DOMContentLoaded", () => {
       playVOFor(currentIndex);
 
       // If autoplay is enabled and this is an "empty" page, schedule fallback
-      if (autoplayEnabled) {
+      /*if (autoplayEnabled) {
         const src = PAGES[currentIndex]?.audio || "";
         if (src.includes("empty.mp3")) {
           scheduleAutoAdvanceFallback(900);
         }
-      }
+      }*/
     });
 
     // Restore page without animating
