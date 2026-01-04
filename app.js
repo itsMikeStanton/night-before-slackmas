@@ -1,25 +1,25 @@
 // app.js
 window.addEventListener("DOMContentLoaded", () => {
   const PAGES = [
-    { img: "assets/pages/coverflip.png", audio: "assets/audio/empty.mp3" },
-    { img: "assets/pages/intro.png", audio: "assets/audio/slackmas0.mp3" },
-    { img: "assets/pages/slackmas1.png", audio: "assets/audio/slackmas1.mp3" },
-    { img: "assets/pages/slackmas2.png", audio: "assets/audio/slackmas2.mp3" },
-    { img: "assets/pages/slackmas3.png", audio: "assets/audio/slackmas3.mp3" },
-    { img: "assets/pages/slackmas4.png", audio: "assets/audio/slackmas4.mp3" },
-    { img: "assets/pages/slackmas5.png", audio: "assets/audio/slackmas5.mp3" },
-    { img: "assets/pages/slackmas6.png", audio: "assets/audio/slackmas6.mp3" },
-    { img: "assets/pages/slackmas7.png", audio: "assets/audio/slackmas7.mp3" },
-    { img: "assets/pages/slackmas8.png", audio: "assets/audio/slackmas8.mp3" },
-    { img: "assets/pages/slackmas9.png",  audio: "assets/audio/empty.mp3" },
-    { img: "assets/pages/slackmas10.png", audio: "assets/audio/empty.mp3" },
-    { img: "assets/pages/slackmas11.png", audio: "assets/audio/empty.mp3" },
-    { img: "assets/pages/slackmas12.png", audio: "assets/audio/slackmas12.mp3" },
-    { img: "assets/pages/slackmas13.png", audio: "assets/audio/slackmas13.mp3" },
-    { img: "assets/pages/slackmas14.png", audio: "assets/audio/slackmas14.mp3" },
-    { img: "assets/pages/slackmas15.png", audio: "assets/audio/slackmas15.mp3" },
-    { img: "assets/pages/slackmas16.png", audio: "assets/audio/slackmas16.mp3" },
-    { img: "assets/pages/theend.png",     audio: "assets/audio/slackmas17.mp3" }
+    { img: "assets/pages/coverflip.jpg", audio: "assets/audio/empty.mp3" },
+    { img: "assets/pages/intro.jpg", audio: "assets/audio/slackmas0.mp3" },
+    { img: "assets/pages/slackmas1.jpg", audio: "assets/audio/slackmas1.mp3" },
+    { img: "assets/pages/slackmas2.jpg", audio: "assets/audio/slackmas2.mp3" },
+    { img: "assets/pages/slackmas3.jpg", audio: "assets/audio/slackmas3.mp3" },
+    { img: "assets/pages/slackmas4.jpg", audio: "assets/audio/slackmas4.mp3" },
+    { img: "assets/pages/slackmas5.jpg", audio: "assets/audio/slackmas5.mp3" },
+    { img: "assets/pages/slackmas6.jpg", audio: "assets/audio/slackmas6.mp3" },
+    { img: "assets/pages/slackmas7.jpg", audio: "assets/audio/slackmas7.mp3" },
+    { img: "assets/pages/slackmas8.jpg", audio: "assets/audio/slackmas8.mp3" },
+    { img: "assets/pages/slackmas9.jpg",  audio: "assets/audio/empty.mp3" },
+    { img: "assets/pages/slackmas10.jpg", audio: "assets/audio/empty.mp3" },
+    { img: "assets/pages/slackmas11.jpg", audio: "assets/audio/empty.mp3" },
+    { img: "assets/pages/slackmas12.jpg", audio: "assets/audio/slackmas12.mp3" },
+    { img: "assets/pages/slackmas13.jpg", audio: "assets/audio/slackmas13.mp3" },
+    { img: "assets/pages/slackmas14.jpg", audio: "assets/audio/slackmas14.mp3" },
+    { img: "assets/pages/slackmas15.jpg", audio: "assets/audio/slackmas15.mp3" },
+    { img: "assets/pages/slackmas16.jpg", audio: "assets/audio/slackmas16.mp3" },
+    { img: "assets/pages/theend.jpg",     audio: "assets/audio/slackmas17.mp3" }
   ];
 
   const wrapEl = document.getElementById("bookWrap");
